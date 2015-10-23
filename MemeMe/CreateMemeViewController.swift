@@ -68,14 +68,12 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
             return
         }
         let meme = Meme(topText: topText, bottomText: bottomText, originalImage: originalImage, memedImage: memedImage)
-        // Add it to the memes array in the Application Delegate
         (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
     }
     
     func generateMemedImage() -> UIImage {
         navigationController?.navigationBar.hidden = true
         toolBar.hidden = true
-        // Render view to an image
         UIGraphicsBeginImageContext(view.frame.size)
         view.drawViewHierarchyInRect(view.frame, afterScreenUpdates: true)
         let memedImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -125,7 +123,6 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         let memeTextAttributes = [
             NSStrokeColorAttributeName : UIColor.blackColor(),
             NSForegroundColorAttributeName : UIColor.whiteColor(),
@@ -160,9 +157,7 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
 
 }
 
