@@ -16,12 +16,14 @@ class SentMemesCollectionViewController: UICollectionViewController {
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
+    
+    // MARK: - View Controller Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView!.registerClass(CustomMemeCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         let space: CGFloat = 3.0
-        let dimension = (self.view.frame.size.width - (2 * space)) / 3.0
+        let dimension = (view.frame.size.width - (2 * space)) / 3.0
         flowLayout.minimumLineSpacing = space
         flowLayout.minimumInteritemSpacing = space
         flowLayout.itemSize = CGSizeMake(dimension, dimension)
@@ -43,22 +45,20 @@ class SentMemesCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
-        let meme = memes[indexPath.item]
-        let imageView = UIImageView(image: meme.memedImage)
-        cell.backgroundView = imageView
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CustomMemeCollectionViewCell
+        cell.meme = memes[indexPath.item]
         return cell
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let meme = memes[indexPath.row]
-        performSegueWithIdentifier("Show Memed Image", sender: meme)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath)
+        performSegueWithIdentifier("Show Memed Image", sender: cell)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "Show Memed Image" {
             let controller = segue.destinationViewController as! MemedImageViewController
-            controller.meme = sender as? Meme
+            controller.meme = (sender as? CustomMemeCollectionViewCell)?.meme
         }
     }
 

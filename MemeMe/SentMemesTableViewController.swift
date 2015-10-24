@@ -8,11 +8,15 @@
 
 import UIKit
 
+typealias editMeme = (top: String, bottom: String, image: UIImage)
+
 class SentMemesTableViewController: UITableViewController {
     
     var memes: [Meme] {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
     }
+    
+    // MARK: - View Controller Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +30,13 @@ class SentMemesTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "Show Memed Image" {
+            let controller = segue.destinationViewController as! MemedImageViewController
+            controller.meme = (sender as! CustomMemeCell).meme
+        }
+    }
 
     // MARK: - Table view data source
 
@@ -35,22 +46,8 @@ class SentMemesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Table View Cell", forIndexPath: indexPath) as! CustomMemeCell
-        let meme = memes[indexPath.row]
-        cell.imageView?.image = meme.memedImage
-        cell.tobBottomLabel.text = "\(meme.topText)...\(meme.bottomText)"
+        cell.meme = memes[indexPath.row]
         return cell
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let meme = memes[indexPath.row]
-        performSegueWithIdentifier("Show Memed Image", sender: meme)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "Show Memed Image" {
-            let controller = segue.destinationViewController as! MemedImageViewController
-            controller.meme = sender as? Meme
-        }
     }
     
     override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {

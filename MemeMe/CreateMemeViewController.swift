@@ -19,16 +19,14 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
     
     var memeToEdit: Meme?
     
-    @IBAction func pickImageFromPhotoAlbum(sender: UIBarButtonItem) {
+    @IBAction func pickImage(sender: UIBarButtonItem) {
         let picker = UIImagePickerController()
+        if sender.title == "Pick" {
+            picker.sourceType = .PhotoLibrary
+        } else {
+            picker.sourceType = .Camera
+        }
         picker.sourceType = .PhotoLibrary
-        picker.delegate = self
-        presentViewController(picker, animated: true, completion: nil)
-    }
-    
-    @IBAction func pickAnImageFromCamera(sender: UIBarButtonItem) {
-        let picker = UIImagePickerController()
-        picker.sourceType = .Camera
         picker.delegate = self
         presentViewController(picker, animated: true, completion: nil)
     }
@@ -93,13 +91,17 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        if bottomTextField.isFirstResponder() {
+        if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) && bottomTextField.isFirstResponder() {
+            view.frame.origin.y -= keyboardHeightFromDictionary(notification.userInfo)! / 2
+        } else if bottomTextField.isFirstResponder() {
             view.frame.origin.y -= keyboardHeightFromDictionary(notification.userInfo) ?? 0
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        if bottomTextField.isFirstResponder() {
+        if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) && bottomTextField.isFirstResponder() {
+            view.frame.origin.y += keyboardHeightFromDictionary(notification.userInfo)! / 2
+        } else if bottomTextField.isFirstResponder() {
             view.frame.origin.y += keyboardHeightFromDictionary(notification.userInfo) ?? 0
         }
     }

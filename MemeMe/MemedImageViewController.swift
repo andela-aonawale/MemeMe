@@ -13,9 +13,6 @@ class MemedImageViewController: UIViewController {
     var meme: Meme?
     
     @IBOutlet weak var memedImageView: UIImageView!
-    @IBAction func edit(sender: UIBarButtonItem) {
-        performSegueWithIdentifier("Edit Meme", sender: meme!)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +31,7 @@ class MemedImageViewController: UIViewController {
         if segue.identifier == "Edit Meme" {
             let navigationController = segue.destinationViewController as! UINavigationController
             let controller = navigationController.topViewController as! CreateMemeViewController
-            controller.memeToEdit = sender as? Meme
+            controller.memeToEdit = meme
         }
     }
 
